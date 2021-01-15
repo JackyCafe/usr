@@ -1,0 +1,24 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+
+{% if readings %}
+<table style="margin: 20px;">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Content</th>
+      <th>Attachment</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for reading in readings %}
+    <tr>
+      <td>{{ reading.title }}</td>
+      <td>{{ reading.content }}</td>
+      <td><a href="{{ reading.attachment.url }}" target="_blank" rel="noopener noreferrer">Download</a></td>
+
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
