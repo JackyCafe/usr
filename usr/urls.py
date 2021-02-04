@@ -21,10 +21,12 @@ from django.db import router
 from django.urls import path,include
 from rest_framework.routers import DefaultRouter
 
-from app.views import ReadingViewSet
+from app.views import ReadingViewSet, BlogViewSet,UserViewSet
 
 router = DefaultRouter()
+router.register(r'user',UserViewSet)
 router.register(r'reading',ReadingViewSet)
+router.register(r'blog',BlogViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

@@ -1,12 +1,14 @@
+from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 # Create your views here.
 from rest_framework import viewsets
 
+
 from app.forms import ReadingForm
-from app.models import Reading
-from app.serializers import ReadingSerializers
+from app.models import Reading, Blog
+from app.serializers import ReadingSerializers, BlogSerializers, UserSerializers
 
 
 def index(request):
@@ -30,6 +32,17 @@ def uploadReading(request):
     return render(request, 'app/upload.html', {'form' : form})
 
 
+
 class ReadingViewSet(viewsets.ModelViewSet):
     queryset = Reading.objects.all()
     serializer_class = ReadingSerializers
+
+
+class BlogViewSet(viewsets.ModelViewSet):
+    queryset = Blog.objects.all()
+    serializer_class =  BlogSerializers
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializers

@@ -11,4 +11,4 @@ class UserProfileAdmin(admin.ModelAdmin):
 
 @admin.register(Reading)
 class ReadingAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Reading._meta.fields]
+    list_display = ['title','category','created','content','attachment']

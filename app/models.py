@@ -4,6 +4,7 @@ from django.db import models
 
 
 # Create your models here.
+from django.utils.text import slugify
 from django_extensions.db.fields import RandomCharField
 
 
@@ -23,7 +24,7 @@ class UserProfile(models.Model):
 
 class Reading(models.Model):
     title = models.CharField(max_length=20)
-    slug = RandomCharField(length=32, unique=True, unique_for_date='created')
+    slug = RandomCharField(length=32,blank=True,null=True)
     category = models.CharField(max_length=32,default='')
     created = models.DateTimeField(auto_now=True,)
     content = RichTextField(verbose_name='內容',null=True)
@@ -36,3 +37,25 @@ class Reading(models.Model):
         self.attachment.delete()
         super(Reading, self).delete(*args,**kwargs)
 
+    def save(self,*args,**kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args,**kwargs)
+
+
+class Blog(models.Model):
+    title = models.CharField(max_length=20)
+    user = models.ForeignKey(User,on_delete=models.CASCADE,related_name='user')
+    slug = RandomCharField(length=32, blank=True, null=True)
+    category = models.CharField(max_length=32, default='')
+    created = models.DateTimeField(auto_now=True, )
+    content = RichTextField(verbose_name='內容', null=True)
+
+    def __str__(self):
+        return self.title
+
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
