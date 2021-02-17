@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from app.models import UserProfile, Reading,Activity,myActivity
+from app.models import UserProfile, Reading, Activity, myActivity, Blog
 
 
 @admin.register(UserProfile)
@@ -20,3 +20,7 @@ class ActivityAdmin(admin.ModelAdmin):
 @admin.register(myActivity)
 class myActivityAdmin(admin.ModelAdmin):
     list_display = [field.name for field in myActivity._meta.fields]
+
+@admin.register(Blog)
+class BlogAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Blog._meta.fields]

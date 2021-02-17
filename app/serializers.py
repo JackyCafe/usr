@@ -19,23 +19,16 @@ class BlogSerializers(serializers.ModelSerializer):
 
 
 class myActivitySerializers(serializers.ModelSerializer):
-
     class Meta:
         model = myActivity
         fields = '__all__'
 
 
 class ActivitySerializers(serializers.ModelSerializer):
-    activity = myActivitySerializers(many=True,source='title')
+    # activity = myActivitySerializers(many=True)
     class Meta:
         model = Activity
         fields = '__all__'
-
-
-
-
-
-
 
 class UserSerializers(serializers.ModelSerializer):
     blog = BlogSerializers(many=True,source='user')
