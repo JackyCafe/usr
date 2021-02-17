@@ -23,13 +23,14 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from app.views import ReadingViewSet, BlogViewSet,UserViewSet,HelloView
+from app.views import ReadingViewSet, BlogViewSet, UserViewSet, HelloView, myActivitySet, ActivitySet
 
 router = DefaultRouter()
 router.register(r'user',UserViewSet)
 router.register(r'reading',ReadingViewSet)
 router.register(r'blog',BlogViewSet)
-
+router.register(r'myActivity',myActivitySet)
+router.register(r'Activity',ActivitySet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
