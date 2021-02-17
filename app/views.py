@@ -3,12 +3,25 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 # Create your views here.
-from rest_framework import viewsets
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 
+from rest_framework import viewsets
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from app.forms import ReadingForm
 from app.models import Reading, Blog
 from app.serializers import ReadingSerializers, BlogSerializers, UserSerializers
+
+
+class HelloView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        content = {'message': 'Hello, World!'}
+        return Response(content)
 
 
 def index(request):
@@ -34,13 +47,22 @@ def uploadReading(request):
 
 
 class ReadingViewSet(viewsets.ModelViewSet):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+    # permission_classes = (AllowAny,)
     queryset = Reading.objects.all()
     serializer_class = ReadingSerializers
+    # http_method_names = ("post", "patch")
+    authentication_classes = (JWTAuthentication,)
+
 
 
 class BlogViewSet(viewsets.ModelViewSet):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
     queryset = Blog.objects.all()
     serializer_class =  BlogSerializers
+    authentication_classes = (JWTAuthentication,)
 
 
 class UserViewSet(viewsets.ModelViewSet):

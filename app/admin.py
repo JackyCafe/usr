@@ -11,4 +11,4 @@ class UserProfileAdmin(admin.ModelAdmin):
 
 @admin.register(Reading)
 class ReadingAdmin(admin.ModelAdmin):
-    list_display = ['title','category','created','content','attachment']
+    list_display = ['title','category','created','content','user']

@@ -9,6 +9,8 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
+from datetime import timedelta
+
 import os
 from pathlib import Path
 
@@ -40,6 +42,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'app.apps.AppConfig',
     'rest_framework',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -77,13 +80,32 @@ WSGI_APPLICATION = 'usr.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+import pymysql
+pymysql.install_as_MySQLdb()
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'usrdb',
+        'USER': 'root',
+        'PASSWORD': '2lgidoal', #修改為您的密碼
+        'PORT': '3306',
     }
 }
-
+DATABASES['default']['HOST'] = '/cloudsql/usr-test-304018:asia-east2:django'
+if os.getenv('GAE_APPLICATION', None):
+    pass
+else:
+    # 開發環境中透過 Cloud SQL Proxy 連線到資料庫
+    DATABASES['default']['HOST'] = '127.0.0.1'
+ 
+# 加入這個變數，指定靜態媒體檔目錄
+STATIC_ROOT = 'static'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -140,4 +162,18 @@ CKEDITOR_CONFIGS = {
             ['RemoveFormat', 'Source']
         ]
     }
+}
+
+REST_FRAMEWORK = {
+    'DEFAULTRMISSION_CLASSES':('rest_framework.permissions.IsAuthenticated'),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+SIMPLE_JWT = {
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=15),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+
+    'ROTATE_REFRESH_TOKENS': True,
 }

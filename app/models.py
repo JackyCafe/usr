@@ -28,15 +28,12 @@ class Reading(models.Model):
     category = models.CharField(max_length=32,default='')
     created = models.DateTimeField(auto_now=True,)
     content = RichTextField(verbose_name='內容',null=True)
-    attachment = models.FileField(upload_to='healthes/%Y/%m/%d/')
-    
+    user = models.ForeignKey(User,on_delete=models.CASCADE,related_name='reading',default=1)
+
     def __str__(self):
         return self.title
     
-    def delete(self,*args,**kwargs):
-        self.attachment.delete()
-        super(Reading, self).delete(*args,**kwargs)
-
+   
     def save(self,*args,**kwargs):
         if not self.slug:
             self.slug = slugify(self.title)

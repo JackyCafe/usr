@@ -1,4 +1,4 @@
-"""usr URL Configuration
+"""JWTProject URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.1/topics/http/urls/
@@ -13,26 +13,28 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.conf import settings
 from django.conf.urls import url
-from django.conf.urls.static import static
 from django.contrib import admin
-from django.db import router
 from django.urls import path,include
 from rest_framework.routers import DefaultRouter
 
-from app.views import ReadingViewSet, BlogViewSet,UserViewSet
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+
+from app.views import ReadingViewSet, BlogViewSet,UserViewSet,HelloView
 
 router = DefaultRouter()
 router.register(r'user',UserViewSet)
 router.register(r'reading',ReadingViewSet)
 router.register(r'blog',BlogViewSet)
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('app/',include('app.urls',namespace='app')),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('hello/', HelloView.as_view(), name='hello'),
     url(r'api/', include(router.urls)),
-
 ]
-if settings.DEBUG:
-    urlpatterns +=static(settings.MEDIA_URL,document_root = settings.MEDIA_ROOT)
