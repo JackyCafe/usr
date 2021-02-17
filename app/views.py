@@ -12,8 +12,9 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from app.forms import ReadingForm
-from app.models import Reading, Blog
-from app.serializers import ReadingSerializers, BlogSerializers, UserSerializers
+from app.models import Reading, Blog, myActivity, Activity
+from app.serializers import ReadingSerializers, BlogSerializers, UserSerializers, myActivitySerializers, \
+    ActivitySerializers
 
 
 class HelloView(APIView):
@@ -56,15 +57,31 @@ class ReadingViewSet(viewsets.ModelViewSet):
     authentication_classes = (JWTAuthentication,)
 
 
-
 class BlogViewSet(viewsets.ModelViewSet):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
+    authentication_classes = (JWTAuthentication,)
+
     queryset = Blog.objects.all()
     serializer_class =  BlogSerializers
+
+
+class ActivitySet(viewsets.ModelViewSet):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
     authentication_classes = (JWTAuthentication,)
+    queryset =  Activity.objects.all()
+    serializer_class = ActivitySerializers
 
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializers
+
+
+class myActivitySet(viewsets.ModelViewSet):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+    authentication_classes = (JWTAuthentication,)
+    queryset = myActivity.objects.all()
+    serializer_class = myActivitySerializers

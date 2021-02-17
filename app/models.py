@@ -56,3 +56,18 @@ class Blog(models.Model):
         if not self.slug:
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
+
+
+class Activity(models.Model):
+    title = models.CharField(max_length=32,verbose_name='活動名稱')
+    content = models.TextField(verbose_name='活動內容')
+    point = models.IntegerField(default=0,verbose_name='點數')
+
+    def __str__(self):
+        return self.title
+
+class myActivity(models.Model):
+    ac_date=models.DateField(auto_now=True)
+    user = models.ForeignKey(User,verbose_name='使用者',on_delete=models.CASCADE,related_name='my_activity')
+    title = models.ForeignKey(Activity,verbose_name='活動名稱',default='',on_delete=models.CASCADE,related_name='activity')
+    point = models.IntegerField(default=0,verbose_name='點數')
