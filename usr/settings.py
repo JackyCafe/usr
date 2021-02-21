@@ -92,8 +92,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'usrdb',
-        'USER': 'yhlin',
-        'PASSWORD': 'Power8916', #修改為您的密碼
+        'USER': 'root',
+        'PASSWORD': '2lgidoal', #修改為您的密碼
         'PORT': '3306',
     }
 }

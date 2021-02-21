@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 
 from rest_framework import viewsets
+from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -14,7 +15,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from app.forms import ReadingForm
 from app.models import Reading, Blog, myActivity, Activity
 from app.serializers import ReadingSerializers, BlogSerializers, UserSerializers, myActivitySerializers, \
-    ActivitySerializers
+    ActivitySerializers, RegisterationSerializers
 
 
 class HelloView(APIView):
@@ -85,3 +86,19 @@ class myActivitySet(viewsets.ModelViewSet):
     authentication_classes = (JWTAuthentication,)
     queryset = myActivity.objects.all()
     serializer_class = myActivitySerializers
+
+
+@api_view(['POST',])
+def registraion_view(request):
+    if request.method == 'POST':
+        serializer = RegisterationSerializers(data = request.data)
+        data = {}
+        if serializer.is_valid():
+            account = serializer.save()
+            data['response'] = "successfully "
+            data['email'] = account.email
+            data['username'] = account.username
+        else:
+            data = serializer.errors
+        return  Response(data)
+

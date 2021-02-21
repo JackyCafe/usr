@@ -23,7 +23,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from app.views import ReadingViewSet, BlogViewSet, UserViewSet, HelloView, myActivitySet, ActivitySet
+from app.views import ReadingViewSet, BlogViewSet, UserViewSet, HelloView, myActivitySet, ActivitySet, registraion_view
 
 router = DefaultRouter()
 router.register(r'user',UserViewSet)
@@ -37,5 +37,6 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('hello/', HelloView.as_view(), name='hello'),
+    path('register',registraion_view,name='registraion_view'),
     url(r'api/', include(router.urls)),
 ]
