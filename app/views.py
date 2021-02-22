@@ -1,11 +1,13 @@
+import django_filters
 from django.contrib.auth.models import User
+from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 # Create your views here.
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -15,7 +17,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from app.forms import ReadingForm
 from app.models import Reading, Blog, myActivity, Activity
 from app.serializers import ReadingSerializers, BlogSerializers, UserSerializers, myActivitySerializers, \
-    ActivitySerializers, RegisterationSerializers
+    ActivitySerializers, RegisterationSerializers, ScoreSerializers
 
 
 class HelloView(APIView):
@@ -102,3 +104,12 @@ def registraion_view(request):
             data = serializer.errors
         return  Response(data)
 
+
+@api_view(['GET'])
+def score(request):
+    if request.method == 'GET':
+        queryset = myActivity.objects.values('user').annotate(score=Sum('point'))
+        # serializer = ScoreSerializers()
+        filterset_fields = ('user',)
+        filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
+        return HttpResponse(queryset, status=status.HTTP_200_OK)

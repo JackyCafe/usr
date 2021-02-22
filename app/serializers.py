@@ -62,3 +62,9 @@ class RegisterationSerializers(serializers.ModelSerializer):
         account.set_password(password)
         account.save()
         return account
+
+
+class ScoreSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = myActivity
+        fields = ('user','point')
